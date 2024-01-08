@@ -15,6 +15,9 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
   const seats = useSelector(getSeats);
   const requests = useSelector(getRequests);
 
+  const takenSeats = seats.filter(seat => seat.day === chosenDay);
+  const seatsNumber = 50;
+
   const [socket, setSocket] = useState();
 
   useEffect(() => {
@@ -77,7 +80,7 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
       </div>
       {requests["LOAD_SEATS"] && requests["LOAD_SEATS"].success && (
         <div className="seats">
-          {[...Array(50)].map((x, i) => prepareSeat(i + 1))}
+          {[...Array(seatsNumber)].map((x, i) => prepareSeat(i + 1))}
         </div>
       )}
       {requests["LOAD_SEATS"] && requests["LOAD_SEATS"].pending && (
@@ -86,7 +89,9 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
       {requests["LOAD_SEATS"] && requests["LOAD_SEATS"].error && (
         <Alert color="warning">Couldn't load seats...</Alert>
       )}
+      <p className="mt-3">Free seats: {seatsNumber - takenSeats.length} / {seatsNumber}</p>
     </div>
+    
   );
 };
 
